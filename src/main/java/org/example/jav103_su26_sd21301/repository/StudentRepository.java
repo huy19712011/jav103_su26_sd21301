@@ -1,0 +1,18 @@
+package org.example.jav103_su26_sd21301.repository;
+
+import jakarta.persistence.EntityManager;
+import org.example.jav103_su26_sd21301.entity.Student;
+import org.example.jav103_su26_sd21301.utils.EntityManagerUtils;
+
+import java.util.List;
+
+public class StudentRepository {
+
+    public List<Student> getStudents() {
+
+        try (EntityManager em = EntityManagerUtils.getEntityManager()){
+
+            return em.createQuery("SELECT s from Student s", Student.class).getResultList();
+        }
+    }
+}
