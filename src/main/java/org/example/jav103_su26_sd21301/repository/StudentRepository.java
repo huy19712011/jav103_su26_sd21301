@@ -25,4 +25,19 @@ public class StudentRepository {
             em.getTransaction().commit();
         }
     }
+
+    public void deleteStudent(long id) {
+
+        try (EntityManager em = EntityManagerUtils.getEntityManager()) {
+
+            em.getTransaction().begin();
+
+            Student student = em.find(Student.class, id);
+            if (student != null) {
+                em.remove(student);
+            }
+
+            em.getTransaction().commit();
+        }
+    }
 }

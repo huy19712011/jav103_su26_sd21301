@@ -12,7 +12,8 @@ import java.util.List;
 @WebServlet(name = "StudentServlet", value = {
         "/students",
         "/students/new",
-        "/students/insert"
+        "/students/insert",
+        "/students/delete"
 })
 public class StudentServlet extends HttpServlet {
 
@@ -29,6 +30,9 @@ public class StudentServlet extends HttpServlet {
                 break;
             case "/students/new":
                 showNewForm(request, response);
+                break;
+            case "/students/delete":
+                deleteStudent(request, response);
                 break;
 
         }
@@ -81,6 +85,15 @@ public class StudentServlet extends HttpServlet {
                 break;
 
         }
+    }
+
+    private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        long id = Long.parseLong(request.getParameter("id"));
+
+        service.deleteStudent(id);
+
+        response.sendRedirect(request.getContextPath() + "/students");
     }
 
 }
