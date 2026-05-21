@@ -13,4 +13,9 @@ public class StudentService {
 
         return studentRepository.getStudents();
     }
+
+    public void addStudent(Student student) {
+
+        studentRepository.addStudent(student);
+    }
 }

@@ -13,6 +13,7 @@
 </head>
 <body>
 <h2>Students</h2>
+<a href="${pageContext.request.contextPath}/students/new">Add</a>
 <table border="1">
     <tr>
         <th>Id</th>

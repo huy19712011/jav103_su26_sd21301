@@ -10,9 +10,19 @@ public class StudentRepository {
 
     public List<Student> getStudents() {
 
-        try (EntityManager em = EntityManagerUtils.getEntityManager()){
+        try (EntityManager em = EntityManagerUtils.getEntityManager()) {
 
             return em.createQuery("SELECT s from Student s", Student.class).getResultList();
+        }
+    }
+
+    public void addStudent(Student student) {
+
+        try (EntityManager em = EntityManagerUtils.getEntityManager()) {
+
+            em.getTransaction().begin();
+            em.persist(student);
+            em.getTransaction().commit();
         }
     }
 }
