@@ -13,7 +13,9 @@ import java.util.List;
         "/students",
         "/students/new",
         "/students/insert",
-        "/students/delete"
+        "/students/delete",
+        "/students/edit",
+        "/students/update"
 })
 public class StudentServlet extends HttpServlet {
 
@@ -34,8 +36,26 @@ public class StudentServlet extends HttpServlet {
             case "/students/delete":
                 deleteStudent(request, response);
                 break;
+            case "/students/edit":
+                editStudent(request, response);
+                break;
 
         }
+    }
+
+    private void editStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // load student info to the form
+        // get student id from form
+        Long id = Long.parseLong(request.getParameter("id"));
+        // get student by id
+        Student student = service.getStudentById(id);
+        // send student to form
+        request.setAttribute("student", student);
+        // redirect to form
+        request
+                .getRequestDispatcher("/views/updateStudentForm.jsp")
+                .forward(request, response);
     }
 
     private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -83,8 +103,23 @@ public class StudentServlet extends HttpServlet {
             case "/students/insert":
                 insertStudent(request, response);
                 break;
+            case "/students/update":
+                updateStudent(request, response);
+                break;
 
         }
+    }
+
+    private void updateStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        // read student info from form
+        Student student = getStudentFromForm(request);
+
+        // update student
+        service.updateStudent(student);
+
+        // redirect to list students
+        response.sendRedirect(request.getContextPath() + "/students");
     }
 
     private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {

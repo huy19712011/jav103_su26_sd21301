@@ -40,4 +40,23 @@ public class StudentRepository {
             em.getTransaction().commit();
         }
     }
+
+    public Student getStudentById(Long id) {
+
+        try (EntityManager em = EntityManagerUtils.getEntityManager()) {
+            return em.find(Student.class, id);
+        }
+    }
+
+    public void updateStudent(Student student) {
+
+        try (EntityManager em = EntityManagerUtils.getEntityManager()) {
+
+            em.getTransaction().begin();
+
+            em.merge(student);
+
+            em.getTransaction().commit();
+        }
+    }
 }
