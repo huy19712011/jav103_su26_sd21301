@@ -58,9 +58,16 @@ public class StudentServlet extends HttpServlet {
                 .forward(request, response);
     }
 
-    private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // read student info from form
         Student student = getStudentFromForm(request);
+
+        if (student.getName() == null || student.getName().trim().isEmpty()) {
+            request.setAttribute("errorMessage", "Name is required!");
+            request.setAttribute("student", student);
+            request.getRequestDispatcher("/views/addStudentForm.jsp").forward(request, response);
+            return;
+        }
 
         // save student to DB
         service.addStudent(student);

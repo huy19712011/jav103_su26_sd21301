@@ -15,6 +15,11 @@
         <tr>
             <td><label>Name</label></td>
             <td><input type="text" name="name" value="${student.name}"/></td>
+            <td>
+                <c:if test="${not empty errorMessage}">
+                    <p style="color: red">${errorMessage}</p>
+                </c:if>
+            </td>
         </tr>
         <tr>
             <td><label>Email</label></td>
