@@ -7,6 +7,17 @@
 <body>
 <h1><%= "Hello World! from JSP" %>
 </h1>
+
+<form action="filterInput">
+    <label>Username</label>
+    <input type="text" name="name">
+    <br>
+    <label>Password</label>
+    <input type="text" name="password">
+    <br>
+    <button type="submit">Submit</button>
+</form>
+
 <p>SD21301</p>
 <%--1. expressions--%>
 <p>The time on server: <%= new java.util.Date() %> </p>
