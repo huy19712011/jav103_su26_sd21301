@@ -5,8 +5,11 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.jav103_su26_sd21301.entity.Student;
 import org.example.jav103_su26_sd21301.service.StudentService;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "StudentServlet", value = {
@@ -15,7 +18,9 @@ import java.util.List;
         "/students/insert",
         "/students/delete",
         "/students/edit",
-        "/students/update"
+        "/students/update",
+        "/students/saveStudent",  //for ajax example
+        "/students/showStudents"   //for ajax example
 })
 public class StudentServlet extends HttpServlet {
 
@@ -39,8 +44,23 @@ public class StudentServlet extends HttpServlet {
             case "/students/edit":
                 editStudent(request, response);
                 break;
+            case "/students/showStudents":
+                showStudents(request, response);
+                break;
 
         }
+    }
+
+    private void showStudents(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        System.out.println("Show all students...");
+        List<Student> students = service.getStudents();
+        students.stream().forEach(student -> System.out.println(student));
+
+        JSONArray jsonArray = new JSONArray(students);
+        response.setContentType("application/json");
+
+        response.getWriter().write(jsonArray.toString()); // send this data to ajax call
     }
 
     private void editStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -79,7 +99,11 @@ public class StudentServlet extends HttpServlet {
 
     private Student getStudentFromForm(HttpServletRequest request) {
 
-        Long id = Long.parseLong(request.getParameter("id"));
+        String idStr = request.getParameter("id");
+        if (idStr == null || idStr.trim().isEmpty()) {
+            throw new IllegalArgumentException("ID is required");
+        }
+        Long id = Long.parseLong(idStr);
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -113,8 +137,29 @@ public class StudentServlet extends HttpServlet {
             case "/students/update":
                 updateStudent(request, response);
                 break;
+            case "/students/saveStudent":
+                saveStudent(request, response);
+                break;
 
         }
+    }
+
+    private String saveStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        System.out.println("Adding ...");
+        Student student = getStudentFromForm(request);
+        service.addStudent(student);
+
+        JSONObject json = new JSONObject();
+        json.put("id", student.getId());
+        json.put("name", student.getName());
+        json.put("email", student.getEmail());
+        json.put("phone", student.getPhone());
+
+        response.setContentType("application/json");
+        response.getWriter().write(json.toString());
+
+        return json.toString();
     }
 
     private void updateStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
